@@ -9,7 +9,10 @@ pipeline {
 }
   stage ('build') {
       steps {
+          sh '''
+          cd backend 
           echo "build successful"
+          '''
       }
   }
   stage ('test') {
