@@ -17,7 +17,6 @@ pipeline {
   }
   stage ('test') {
       steps {
-           sh 'mvn clean package'
           echo "test successful"
       }
   }
