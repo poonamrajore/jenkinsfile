@@ -1,47 +1,34 @@
 pipeline {
-    agent any 
-
+    agent any
+    
     stages {
-
-        stage('git pull') {
+        
+        stage ('Git-Pull') {
             steps {
-                git branch: 'main', url: 'https://github.com/shubhamkalsait/EasyCRUD.git'
-                echo "git pull successful"
+                git branch: 'devops', url: 'https://github.com/shubhamkalsait/EasyCRUD.git'
             }
         }
-
-        stage('build') {
+         stage ("Build") {
             steps {
                 sh '''
                 cd backend
-                mvn clean package
-                '''
+                mvn clean package -DskipTests'''
+            }
+        }
+         stage ("Test") {
+            steps {
+               withSonarQubeEnv(installationName: 'sonarqube' , credentialsId: 'sonar-cred') {
+                        sh '''
+                        cd backend
+                        mvn sonar:sonar -Dsonar.projectKey=studentapp '''
+                    }
             }
         }
 
-        stage('Test') {
+        stage ("QualityGate") {
             steps {
-                withSonarQubeEnv('sonarqube') {
-                    sh '''
-                    cd backend
-                    mvn sonar:sonar -Dsonar.projectKey=studentapp
-                    '''
-                }
+                    timeout(10) {
+                             waitForQualityGate abortPipeline: true, credentialsId: 'sonar-cred'
+                        }
             }
         }
-
-        stage('QualityGate') {
-            steps {
-                timeout (10) {
-                waitForQualityGate abortPipeline: true 
-            }
-            }
-        }
-
-        stage('deploy') {
-            steps {
-                echo "deploy successful"
-            }
-        }
-    }
-}
