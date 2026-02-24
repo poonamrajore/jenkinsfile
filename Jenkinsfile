@@ -19,7 +19,7 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
+        stage('Test') {
             steps {
                 withSonarQubeEnv('sonarqube') {
                     sh '''
@@ -32,7 +32,9 @@ pipeline {
 
         stage('QualityGate') {
             steps {
+                timeout (10) {
                 waitForQualityGate abortPipeline: true 
+            }
             }
         }
 
