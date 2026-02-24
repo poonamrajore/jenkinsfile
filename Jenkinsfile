@@ -34,7 +34,7 @@ pipeline {
     
      stage ("S3-UPLOAD") {
        steps {
-            sh 'aws s3 cp backend/target/*.jar s3://easy-crud-b34-bkt/studentapp.jar'
+            sh 'aws s3 cp backend/target/*.jar s3://jenkins-s3-poonam/studentapp.jar'
      }
      }
 }
