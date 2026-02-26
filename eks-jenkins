@@ -1,1 +1,38 @@
+pipeline {
+agent any
+stages {
 
+        stage('Pull') {
+            steps {
+                git branch: 'main', 
+                url: 'https://github.com/your-username/eks-terraform.git'
+            }
+        }
+ stage('PLAN') {
+            steps {
+                sh '''
+                terraform --version
+                terraform init
+                terraform plan
+              '''
+            }
+        }
+stage('APPROVE') {
+  steps {
+  sh 'input 'ALL GOOD', ok:'APPROVE''
+}
+}
+stage('APPLY') {
+            steps {
+                sh '''
+                terraform apply -auto-approve tfplan
+                '''
+            }
+        }
+ stage('DEPLOY') {
+   steps {
+   sh 'Deploy successful'
+      }
+     }
+  }
+}
