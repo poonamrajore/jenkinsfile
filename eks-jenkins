@@ -19,13 +19,13 @@ stages {
         }
 stage('APPROVE') {
   steps {
-  sh 'input 'ALL GOOD', ok:'APPROVE''
+  input message: 'ALL GOOD', ok:'APPROVE'
 }
 }
 stage('APPLY') {
             steps {
                 sh '''
-                terraform apply -auto-approve tfplan
+                terraform apply -auto-approve 
                 '''
             }
         }
